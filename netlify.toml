@@ -1,0 +1,9 @@
+# Configuración para desplegar TRAZZO en Netlify (conectado a GitHub).
+# Cada vez que subes cambios a GitHub, Netlify vuelve a construir y publicar la app.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Vite necesita Node 20.19 o más nuevo
+  NODE_VERSION = "22"

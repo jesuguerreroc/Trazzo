@@ -1,0 +1,17 @@
+# Dependencias y archivos generados
+node_modules
+dist
+dev-dist
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+*.log
+
+# Variables de entorno (por si algún día las usas)
+.env
+.env.*
+
+# Tus datos personales: NO subirlos a GitHub
+mis-datos-trazzo.json
+trazzo-copia-*.json

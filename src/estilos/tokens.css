@@ -1,0 +1,111 @@
+/* ============================================================
+   TOKENS DE DISEÑO — aquí cambias colores, letras y tamaños.
+   TRAZZO usa UN solo color de acento: --acento (violeta).
+   El rojo y el verde solo se usan para dar significado:
+   rojo = atrasado / prioridad alta · verde = hecho / pagado.
+   ============================================================ */
+
+:root {
+  /* Letras: Outfit para títulos y números, Plus Jakarta Sans para el texto */
+  --fuente: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fuente-display: 'Outfit Variable', 'Outfit', var(--fuente);
+
+  /* Bordes redondeados */
+  --radio-s: 10px;
+  --radio: 14px;
+  --radio-l: 18px;
+  --radio-xl: 24px;
+  --radio-pill: 999px;
+
+  /* Medidas de la estructura */
+  --lateral-ancho: 252px;
+  --nav-alto: 66px;
+  --nav-margen: 10px;
+  --cabecera-alto: 60px;
+  --contenido-max: 1160px;
+
+  /* Movimiento */
+  --curva: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --rapido: 160ms;
+  --medio: 260ms;
+}
+
+/* ---------- MODO OSCURO (por defecto) ---------- */
+:root,
+[data-theme='oscuro'] {
+  color-scheme: dark;
+  --fondo: #0c0c0e;
+  --fondo-lateral: #101013;
+  --superficie: #151518;
+  --superficie-2: #1c1c20;
+  --superficie-3: #26262b;
+  --borde: rgba(255, 255, 255, 0.07);
+  --borde-fuerte: rgba(255, 255, 255, 0.14);
+  --brillo: rgba(255, 255, 255, 0.04);   /* reflejo suave arriba de las tarjetas */
+
+  --texto: #f2f1ee;
+  --texto-2: #a3a3ab;
+  --texto-3: #74747c;
+
+  --acento: #6a5af9;             /* ← CAMBIA ESTE para cambiar el color de la app */
+  --acento-vivo: #7c6cff;        /* versión brillante (logo, detalles) */
+  --sobre-acento: #ffffff;
+  --acento-texto: #ab9fff;       /* acento para textos sobre fondo oscuro */
+  --acento-suave: rgba(124, 108, 255, 0.15);
+
+  --rojo: #ff6b6b;
+  --rojo-suave: rgba(255, 107, 107, 0.09);
+  --rojo-borde: rgba(255, 107, 107, 0.32);
+  --verde: #34d399;
+  --sobre-verde: #04281b;
+  --verde-suave: rgba(52, 211, 153, 0.13);
+
+  --sombra: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --sombra-nav: 0 10px 30px rgba(0, 0, 0, 0.55);
+  --velo: rgba(0, 0, 0, 0.62);
+
+  /* Aviso inferior (claro sobre fondo oscuro) */
+  --aviso-fondo: #f2f1ee;
+  --aviso-texto: #111114;
+  --aviso-acento: #4f3fe0;
+  --aviso-exito: #0b8a5e;
+}
+
+/* ---------- MODO CLARO ---------- */
+[data-theme='claro'] {
+  color-scheme: light;
+  --fondo: #f6f5f2;
+  --fondo-lateral: #efeeea;
+  --superficie: #ffffff;
+  --superficie-2: #f1f0ec;
+  --superficie-3: #e6e5e0;
+  --borde: rgba(0, 0, 0, 0.08);
+  --borde-fuerte: rgba(0, 0, 0, 0.15);
+  --brillo: rgba(255, 255, 255, 0);
+
+  --texto: #18181b;
+  --texto-2: #5a5a62;
+  --texto-3: #74747c;
+
+  --acento: #5b4bea;
+  --acento-vivo: #6a5af9;
+  --sobre-acento: #ffffff;
+  --acento-texto: #4a3ad6;
+  --acento-suave: rgba(91, 75, 234, 0.1);
+
+  --rojo: #d92d20;
+  --rojo-suave: rgba(217, 45, 32, 0.06);
+  --rojo-borde: rgba(217, 45, 32, 0.3);
+  --verde: #0b8a5e;
+  --sobre-verde: #ffffff;
+  --verde-suave: rgba(11, 138, 94, 0.1);
+
+  --sombra: 0 12px 32px rgba(20, 20, 30, 0.1);
+  --sombra-nav: 0 10px 30px rgba(20, 20, 30, 0.14);
+  --velo: rgba(20, 20, 25, 0.38);
+
+  --aviso-fondo: #18181b;
+  --aviso-texto: #f2f1ee;
+  --aviso-acento: #ab9fff;
+  --aviso-exito: #34d399;
+}

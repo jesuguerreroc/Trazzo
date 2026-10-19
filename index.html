@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es" data-theme="oscuro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0C0C0E" />
+    <meta name="description" content="TRAZZO: tus pendientes, videos y cobros en un solo vistazo." />
+    <link rel="icon" type="image/svg+xml" href="/icono.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="TRAZZO" />
+    <title>TRAZZO</title>
+    <script>
+      // Aplica el tema guardado (oscuro/claro) antes de pintar la página, para evitar parpadeos.
+      try {
+        var t = localStorage.getItem('trazzo:tema');
+        if (t) {
+          document.documentElement.dataset.theme = t;
+          if (t === 'claro') document.querySelector('meta[name="theme-color"]').content = '#F6F5F2';
+        }
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
