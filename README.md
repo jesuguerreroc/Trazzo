@@ -70,6 +70,8 @@ En un contador tú decides las palabras: si escribes *“marca”* y *“videos�
 - **Inicio de un vistazo:** números grandes, pendientes ordenados por urgencia (atrasadas → hoy → prioridad),
   tus contadores con botón **Hecho** y lo que te deben por cliente.
 - **Un clic para todo:** marcar hecho, restar un video, marcar pagado… siempre con **Deshacer**.
+- **¿Cuáles te faltan?:** toca una marca y despliega su lista (ej: videos 3, 8, 9…). Marcas uno y el
+  número baja solo. En el Inicio salen como botoncitos para tacharlos con un toque.
 - **Agregar rápido:** escribes el pendiente, presionas Enter y listo. Fecha y prioridad son opcionales.
 - **Semana tipo calendario:** tira de días en el celular, 7 columnas en el computador.
 - **Cobros en COP:** escribe `105` y se guarda **$105.000**. Agrupados por cliente, con subtotales y total general.

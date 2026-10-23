@@ -31,7 +31,9 @@ export function ContadorEditor({ abierto, item, tablero, alCerrar }) {
       setError(`Escribe el nombre.`);
       return;
     }
-    const datos = { nombre: nombre.trim(), pendientes: Math.max(0, Number(pendientes) || 0), notas: notas.trim() };
+    // El número nunca queda por debajo de los pendientes que tienen nombre en la lista
+    const enLista = item?.items?.length || 0;
+    const datos = { nombre: nombre.trim(), pendientes: Math.max(enLista, Number(pendientes) || 0), notas: notas.trim() };
     if (editando) acciones.actualizar('contadores', item.id, datos);
     else acciones.crear('contadores', { ...datos, tablero: tablero.id });
     alCerrar();

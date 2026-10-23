@@ -37,9 +37,10 @@ export const tareas = [
 
 // CONTADORES: una fila por cliente con su número de pendientes.
 // "tablero" = id del tablero de tipo contador al que pertenece.
+// "items" (opcional) = cuáles faltan, para tacharlos uno por uno.
 export const contadores = [
-  { tablero: 'clientes', nombre: 'CAFÉ AROMA', pendientes: 6, notas: 'Reels de la nueva carta' },
-  { tablero: 'clientes', nombre: 'ESTUDIO NORTE', pendientes: 3 },
+  { tablero: 'clientes', nombre: 'CAFÉ AROMA', pendientes: 6, notas: 'Reels de la nueva carta', items: ['Reel 1', 'Reel 2', 'Reel 3'] },
+  { tablero: 'clientes', nombre: 'ESTUDIO NORTE', pendientes: 3, items: ['3', '8', '9'] },
   { tablero: 'clientes', nombre: 'TIENDA LUNA', pendientes: 2, notas: 'Unboxing y testimonio' },
   { tablero: 'clientes', nombre: 'GIMNASIO FIT', pendientes: 0 },
   { tablero: 'clientes', nombre: 'ÓPTICA VISIÓN', pendientes: 0 },

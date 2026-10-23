@@ -1,6 +1,7 @@
 // Convierte los datos de ejemplo (ejemplo.js) al formato que guarda la app.
 import * as ejemplo from './ejemplo';
 import { sumarDias } from '../utils/fechas';
+import { nuevoIdSubitem } from '../utils/subitems';
 
 export function construirEjemplo(hoy) {
   const ahora = Date.now();
@@ -33,6 +34,7 @@ export function construirEjemplo(hoy) {
       nombre: c.nombre,
       pendientes: c.pendientes || 0,
       notas: c.notas || '',
+      items: (c.items || []).map((texto) => ({ id: nuevoIdSubitem(), texto })),
       creada: ahora + i,
     })),
 

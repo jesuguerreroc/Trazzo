@@ -105,7 +105,7 @@ export default function Contadores({ tablero }) {
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0, transition: { duration: 0.28, delay: 0.3 } }}
               >
-                <ContadorFila item={item} alEditar={abrir} />
+                <ContadorFila item={item} tablero={tablero} alEditar={abrir} />
               </motion.li>
             ))}
           </AnimatePresence>

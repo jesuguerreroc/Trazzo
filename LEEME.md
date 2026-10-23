@@ -127,6 +127,8 @@ Eliges el tipo, el nombre y el ícono. En un contador también escribes cómo se
 | Borrar un tablero                        | Lápiz ✏ → botón rojo de la papelera                         |
 | Elegir qué tableros salen en la barra    | **Tableros → Ordenar**: los 2 primeros salen abajo en el celular |
 | Agregar una marca / cliente              | Abre el tablero contador → **+ Nueva marca** (o el **+**)    |
+| Ver cuáles te faltan de una marca        | Toca el **nombre** → se despliega la lista. Escribe `3 8 9` y Enter para agregar varios |
+| Tachar uno de la lista                   | Toca su círculo (o el botoncito en el Inicio): sale de la lista y el número baja |
 | Escribir el número de pendientes         | Toca el **número** grande y escríbelo                       |
 | Agregar un cobro a un cliente            | En el tablero de cobros, **+ Agregar a (cliente)**          |
 | Agregar un pendiente rápido              | Escribe en "Agregar un pendiente…" y presiona Enter         |

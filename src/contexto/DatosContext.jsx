@@ -7,6 +7,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { COLECCIONES, crearAlmacen } from '../servicios/almacen';
 import { construirEjemplo } from '../datos/construirEjemplo';
 import { hoyISO } from '../utils/fechas';
+import { nuevoIdSubitem, separarSubitems } from '../utils/subitems';
 import { useAviso } from './AvisosContext';
 
 const DatosContext = createContext(null);
@@ -42,6 +43,8 @@ export function DatosProvider({ usuario, children }) {
   // Acciones que pueden usar todas las pantallas
   const acciones = useMemo(() => {
     const tablerosOrdenados = () => [...(ultimos.current.tableros || [])].sort(porOrden);
+    // Siempre la versión más reciente de un contador (por si tocas varios botones seguidos)
+    const contador = (id) => (ultimos.current.contadores || []).find((c) => c.id === id);
 
     return {
       // Genéricas
@@ -81,9 +84,44 @@ export function DatosProvider({ usuario, children }) {
           completada: estado === 'HECHO' ? Date.now() : null,
         }),
 
-      // Contadores: nunca baja de 0
-      cambiarPendientes: (id, n) =>
-        almacen.actualizar('contadores', id, { pendientes: Math.max(0, Math.round(Number(n) || 0)) }),
+      // Contadores: nunca baja de 0, ni de la cantidad de pendientes que tienen nombre en la lista
+      cambiarPendientes: (id, n) => {
+        const minimo = contador(id)?.items?.length || 0;
+        almacen.actualizar('contadores', id, { pendientes: Math.max(minimo, Math.round(Number(n) || 0)) });
+      },
+
+      // Lista de "cuáles me faltan" dentro de un contador (ej: videos 3, 8, 9…)
+      agregarSubitems: (id, textos, extra = {}) => {
+        const c = contador(id);
+        if (!c || !textos.length) return;
+        const items = [...(c.items || []), ...textos.map((texto) => ({ id: nuevoIdSubitem(), texto }))];
+        // Si agregas más nombres que el número actual, el número sube; si no, se queda igual
+        almacen.actualizar('contadores', id, {
+          ...extra,
+          items,
+          pendientes: Math.max(Number(c.pendientes) || 0, items.length),
+        });
+      },
+      /** Marca uno de la lista como hecho: sale de la lista y el número baja 1. Devuelve el estado anterior. */
+      completarSubitem: (id, subId) => {
+        const c = contador(id);
+        if (!c) return null;
+        const antes = { items: c.items || [], pendientes: Number(c.pendientes) || 0 };
+        const items = antes.items.filter((s) => s.id !== subId);
+        almacen.actualizar('contadores', id, { items, pendientes: Math.max(items.length, antes.pendientes - 1) });
+        return antes;
+      },
+      /** Quita uno de la lista sin contarlo como hecho (por ejemplo, si lo escribiste mal). */
+      quitarSubitem: (id, subId) => {
+        const c = contador(id);
+        if (!c) return null;
+        const antes = { items: c.items || [], pendientes: Number(c.pendientes) || 0 };
+        const items = antes.items.filter((s) => s.id !== subId);
+        // Si todos los pendientes tenían nombre, el número baja con la lista
+        const pendientes = antes.pendientes === antes.items.length ? items.length : antes.pendientes;
+        almacen.actualizar('contadores', id, { items, pendientes });
+        return antes;
+      },
 
       // Cobros
       marcarPagado: (id, pagado) =>
@@ -147,7 +185,11 @@ export function useAlternarTarea() {
   );
 }
 
-/** Botón HECHO de un contador: resta 1 (mínimo 0). */
+/**
+ * Botón HECHO de un contador: resta 1 (mínimo 0).
+ * Si todos los pendientes tienen nombre en la lista, no sabe cuál terminaste:
+ * devuelve 'elegir' para que la pantalla abra la lista.
+ */
 export function useHechoContador() {
   const { acciones } = useDatos();
   const avisar = useAviso();
@@ -155,7 +197,11 @@ export function useHechoContador() {
   return useCallback(
     (item) => {
       const actual = Number(item.pendientes) || 0;
-      if (actual <= 0) return;
+      if (actual <= 0) return 'nada';
+      if ((item.items?.length || 0) >= actual) {
+        avisar({ texto: 'Toca en la lista cuál terminaste' });
+        return 'elegir';
+      }
       const quedan = actual - 1;
       acciones.cambiarPendientes(item.id, quedan);
       avisar({
@@ -163,7 +209,50 @@ export function useHechoContador() {
         tipo: 'exito',
         accion: { etiqueta: 'Deshacer', alHacer: () => acciones.cambiarPendientes(item.id, actual) },
       });
+      return 'hecho';
     },
+    [acciones, avisar]
+  );
+}
+
+/** Lista de "cuáles me faltan" de un contador, con "Deshacer". */
+export function useSubitems() {
+  const { acciones } = useDatos();
+  const avisar = useAviso();
+
+  return useMemo(
+    () => ({
+      /** Agrega lo que escribiste (ej: '3 8 9'). Devuelve cuántos agregó. */
+      agregar: (item, texto) => {
+        const textos = separarSubitems(texto);
+        acciones.agregarSubitems(item.id, textos);
+        return textos.length;
+      },
+      completar: (item, sub) => {
+        const antes = acciones.completarSubitem(item.id, sub.id);
+        if (!antes) return;
+        avisar({
+          texto: `${item.nombre}: “${sub.texto}” listo`,
+          tipo: 'exito',
+          accion: { etiqueta: 'Deshacer', alHacer: () => acciones.actualizar('contadores', item.id, antes) },
+        });
+      },
+      quitar: (item, sub) => {
+        const antes = acciones.quitarSubitem(item.id, sub.id);
+        if (!antes) return;
+        avisar({
+          texto: `“${sub.texto}” quitado de la lista`,
+          tipo: 'exito',
+          accion: { etiqueta: 'Deshacer', alHacer: () => acciones.actualizar('contadores', item.id, antes) },
+        });
+      },
+      /** Convierte las notas (ej: '3 8 9 10 11 12') en la lista y las deja vacías. */
+      desdeNotas: (item) => {
+        const textos = separarSubitems(item.notas);
+        acciones.agregarSubitems(item.id, textos, { notas: '' });
+        avisar({ texto: `${textos.length} agregados a la lista`, tipo: 'exito' });
+      },
+    }),
     [acciones, avisar]
   );
 }
